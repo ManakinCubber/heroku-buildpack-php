@@ -91,8 +91,11 @@ composer_lock_parse_error=$(
 		to dependencies during collaboration and deployment.
 	EOF
 )
-echo $COMPOSER
-cat "$COMPOSER"
+echo "---------TEST----------"
+touch fail.txt
+cat "$COMPOSER" | python2 -mjson.tool &> fail.txt
+cat fail.txt
+echo "--------END TEST-------"
 # a bunch of sanity checks first
 if [[ -s "$COMPOSER" ]]; then
 	cat "$COMPOSER" | python2 -mjson.tool &> /dev/null || {
