@@ -91,69 +91,65 @@ composer_lock_parse_error=$(
 		to dependencies during collaboration and deployment.
 	EOF
 )
-echo "---------TEST----------"
-pip uninstall mjson
-pip install mjson
-cat "$COMPOSER" | python2 -mjson.tool
-echo "--------END TEST-------"
+
 # a bunch of sanity checks first
-if [[ -s "$COMPOSER" ]]; then
-	cat "$COMPOSER" | python2 -mjson.tool &> /dev/null || {
-		mcount "failures.composer_json.lint"
-		error <<-EOF
-			Basic validation for '$COMPOSER' failed!
-			
-			It must be a valid JSON document compatible with Composer.
-			
-			You most likely created or edited the file by hand, and it now
-			contains a syntax error. Please refer to the documentation at
-			https://getcomposer.org/doc/ for information on the format.
-			
-			You can run 'composer validate' locally on your computer for
-			further diagnosis. Remember to also always keep your lock file
-			up to date with any changes according to the instructions at
-			https://getcomposer.org/doc/01-basic-usage.md
-		EOF
-	}
-	if [[ ! -f "$COMPOSER_LOCK" ]]; then
-		cat "$COMPOSER" | python2 -c 'import sys, json; sys.exit(bool(json.load(sys.stdin).get("require", {})))' 2> /dev/null || {
-			mcount "failures.composer_lock.missing"
-			error <<-EOF
-				No '$COMPOSER_LOCK' found!
-				
-				A '$COMPOSER_LOCK' file was not found in your project, but there
-				is a '$COMPOSER' file with dependencies inside 'require'.
-				
-				The lock file is required in order to guarantee reliable and
-				reproducible installation of dependencies across platforms and
-				deploys. You must follow the Composer best practice of having
-				your lock file under version control in order to deploy. The
-				lock file must not be in your '.gitignore'.
-				
-				Please perform the following steps locally on your computer to
-				resolve this issue before attempting another deploy:
-				1) remove '$COMPOSER_LOCK' from file '.gitignore', if present
-				2) if no '$COMPOSER_LOCK' exists, run 'composer update'
-				3) stage the lock file changes using 'git add $COMPOSER_LOCK'
-				4) if you edited '.gitignore', also run 'git add .gitignore'
-				5) commit the change using 'git commit'
-				
-				Please remember to always keep your '$COMPOSER_LOCK' updated in
-				lockstep with '$COMPOSER' to avoid common problems related
-				to dependencies during collaboration and deployment.
-				
-				Please refer to the Composer documentation for further details:
-				https://getcomposer.org/doc/
-				https://getcomposer.org/doc/01-basic-usage.md
-			EOF
-		}
-	else
-		cat "$COMPOSER_LOCK" | python2 -mjson.tool &> /dev/null || {
-			mcount "failures.composer_lock.lint"
-			error "$composer_lock_parse_error"
-		}
-	fi
-else
+#if [[ -s "$COMPOSER" ]]; then
+#	cat "$COMPOSER" | python2 -mjson.tool &> /dev/null || {
+#		mcount "failures.composer_json.lint"
+#		error <<-EOF
+#			Basic validation for '$COMPOSER' failed!
+#			
+#			It must be a valid JSON document compatible with Composer.
+#			
+#			You most likely created or edited the file by hand, and it now
+#			contains a syntax error. Please refer to the documentation at
+#			https://getcomposer.org/doc/ for information on the format.
+#			
+#			You can run 'composer validate' locally on your computer for
+#			further diagnosis. Remember to also always keep your lock file
+#			up to date with any changes according to the instructions at
+#			https://getcomposer.org/doc/01-basic-usage.md
+#		EOF
+#	}
+#	if [[ ! -f "$COMPOSER_LOCK" ]]; then
+#		cat "$COMPOSER" | python2 -c 'import sys, json; sys.exit(bool(json.load(sys.stdin).get("require", {})))' 2> /dev/null || {
+#			mcount "failures.composer_lock.missing"
+#			error <<-EOF
+#				No '$COMPOSER_LOCK' found!
+#				
+#				A '$COMPOSER_LOCK' file was not found in your project, but there
+#				is a '$COMPOSER' file with dependencies inside 'require'.
+#				
+#				The lock file is required in order to guarantee reliable and
+#				reproducible installation of dependencies across platforms and
+#				deploys. You must follow the Composer best practice of having
+#				your lock file under version control in order to deploy. The
+#				lock file must not be in your '.gitignore'.
+#				
+#				Please perform the following steps locally on your computer to
+#				resolve this issue before attempting another deploy:
+#				1) remove '$COMPOSER_LOCK' from file '.gitignore', if present
+#				2) if no '$COMPOSER_LOCK' exists, run 'composer update'
+#				3) stage the lock file changes using 'git add $COMPOSER_LOCK'
+#				4) if you edited '.gitignore', also run 'git add .gitignore'
+#				5) commit the change using 'git commit'
+#				
+#				Please remember to always keep your '$COMPOSER_LOCK' updated in
+#				lockstep with '$COMPOSER' to avoid common problems related
+#				to dependencies during collaboration and deployment.
+#				
+#				Please refer to the Composer documentation for further details:
+#				https://getcomposer.org/doc/
+#				https://getcomposer.org/doc/01-basic-usage.md
+#			EOF
+#		}
+#	else
+#		cat "$COMPOSER_LOCK" | python2 -mjson.tool &> /dev/null || {
+#			mcount "failures.composer_lock.lint"
+#			error "$composer_lock_parse_error"
+#		}
+#	fi
+#else
 	if [[ ! -f "$COMPOSER" ]]; then
 		mcount "warnings.composer_json.missing"
 		warning <<-EOF
@@ -189,7 +185,7 @@ else
 		EOF
 	fi
 	echo "{}" > $COMPOSER
-fi
+#fi
 
 # PHP expects to be installed in /app/.heroku/php because of compiled paths, let's set that up!
 mkdir -p /app/.heroku
