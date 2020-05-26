@@ -150,41 +150,41 @@ composer_lock_parse_error=$(
 #		}
 #	fi
 #else
-	if [[ ! -f "$COMPOSER" ]]; then
-		mcount "warnings.composer_json.missing"
-		warning <<-EOF
-			No '$COMPOSER' found!
-			
-			Your project only contains an 'index.php', no '$COMPOSER'.
-			
-			Using 'index.php' to declare app type as PHP is deprecated and
-			may lead to unexpected behavior.
-			
-			Please consider updating your codebase to utilize Composer and
-			modern dependency management in order to benefit from the latest
-			PHP runtimes and improved application performance, as well as
-			control over the PHP versions and extensions available.
-			
-			For an introduction to dependency management with Composer and
-			how to get the most out of PHP on Heroku, refer to the docs at
-			https://getcomposer.org/doc/00-intro.md and
-			https://devcenter.heroku.com/articles/getting-started-with-php
-		EOF
-	else
-		mcount "warnings.composer_json.empty"
-		notice <<-EOF
-			Your '$COMPOSER' is completely empty!
-			
-			A completely empty file is not a valid JSON document.
-			
-			Heroku automatically corrected this problem, but it is strongly
-			recommended you change the contents to at least '{}'.
-			
-			For documentation on Composer and dependency management, check
-			out the introduction at https://getcomposer.org/doc/00-intro.md
-		EOF
-	fi
-	echo "{}" > $COMPOSER
+#	if [[ ! -f "$COMPOSER" ]]; then
+#		mcount "warnings.composer_json.missing"
+#		warning <<-EOF
+#			No '$COMPOSER' found!
+#			
+#			Your project only contains an 'index.php', no '$COMPOSER'.
+#			
+#			Using 'index.php' to declare app type as PHP is deprecated and
+#			may lead to unexpected behavior.
+#			
+#			Please consider updating your codebase to utilize Composer and
+#			modern dependency management in order to benefit from the latest
+#			PHP runtimes and improved application performance, as well as
+#			control over the PHP versions and extensions available.
+#			
+#			For an introduction to dependency management with Composer and
+#			how to get the most out of PHP on Heroku, refer to the docs at
+#			https://getcomposer.org/doc/00-intro.md and
+#			https://devcenter.heroku.com/articles/getting-started-with-php
+#		EOF
+#	else
+#		mcount "warnings.composer_json.empty"
+#		notice <<-EOF
+#			Your '$COMPOSER' is completely empty!
+#			
+#			A completely empty file is not a valid JSON document.
+#			
+#			Heroku automatically corrected this problem, but it is strongly
+#			recommended you change the contents to at least '{}'.
+#			
+#			For documentation on Composer and dependency management, check
+#			out the introduction at https://getcomposer.org/doc/00-intro.md
+#		EOF
+#	fi
+#	echo "{}" > $COMPOSER
 #fi
 
 # PHP expects to be installed in /app/.heroku/php because of compiled paths, let's set that up!
